@@ -209,7 +209,7 @@ def parse_nl_hand(hand):
         else:
             return hand[1].rank + hand[0].rank + token
 
-def ranges(position, range_file="default_ranges.json"):
+def ranges(position, range_file="default_open_ranges.json"):
     with open(range_file) as infile:
         _ranges = json.load(infile)
     return _ranges[position.lower()]
