@@ -5,6 +5,7 @@ from __future__ import annotations
 import random
 import json
 
+
 class Card:
     """
     Class to represent a card.
@@ -44,7 +45,7 @@ class Card:
         :returns: No return; constructor.
         :rtype: N/A.
         """
-        
+
         # Just to check...
         rank, suit = str(rank), str(suit)
 
@@ -68,7 +69,7 @@ class Card:
         """
         Compare the ranks of two cards.
         Does not compare suit.
-        
+
         :param other: Card to compare to.
         :type other: Card.
 
@@ -83,7 +84,7 @@ class Card:
         """
         Compare the ranks of two cards.
         Does not compare suit.
-        
+
         :param other: Card to compare to.
         :type other: Card.
 
@@ -92,12 +93,12 @@ class Card:
         :rtype: bool.
         """
         return self._rank_values[self._rank] > self._rank_values[other.rank]
-    
+
     def __lt__(self, other):
         """
         Compare the ranks of two cards.
         Does not compare suit.
-        
+
         :param other: Card to compare to.
         :type other: Card.
 
@@ -106,12 +107,12 @@ class Card:
         :rtype: bool.
         """
         return self._rank_values[self._rank] < self._rank_values[other.rank]
-            
+
     @property
     def suit(self: Card) -> str:
         """
         Getter for the card's suit.
-        
+
         :returns: The suit of the card.
         :rtype: str.
         """
@@ -121,7 +122,7 @@ class Card:
     def rank(self: Card) -> str:
         """
         Getter for the card's rank.
-        
+
         :returns: The rank of the card.
         :rtype: str.
         """
@@ -159,7 +160,6 @@ class Hand:
     def __len__(self):
         return len(self.cards)
 
-
     def __getitem__(self, key):
         return self._cards[key]
 
@@ -170,6 +170,7 @@ class Hand:
     @property
     def suits(self):
         return [card.suit for card in self._cards]
+
 
 def generate_cards(num):
     suits = ["H", "S", "D", "C"]
@@ -209,10 +210,12 @@ def parse_nl_hand(hand):
         else:
             return hand[1].rank + hand[0].rank + token
 
+
 def ranges(position, range_file="default_open_ranges.json"):
     with open(range_file) as infile:
         _ranges = json.load(infile)
     return _ranges[position.lower()]
+
 
 def correct_move(position, hand):
     if parse_nl_hand(hand) in ranges(position):
