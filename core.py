@@ -108,6 +108,15 @@ class Card:
         """
         return self._rank_values[self._rank] < self._rank_values[other.rank]
 
+    def __repr__(self: Card) -> str:
+        """
+        Representation of the card.
+
+        :returns: The rank and suit of the card.
+        :rtype: str.
+        """
+        return self.rank + self.suit
+
     @property
     def suit(self: Card) -> str:
         """
@@ -130,6 +139,7 @@ class Card:
 
 
 class Table:
+    ""
     def __init__(self, start_x, start_y, width, height):
         self._start_x = start_x
         self._start_y = start_y
@@ -155,13 +165,22 @@ class Table:
 
 class Hand:
     def __init__(self, *cards):
-        self._cards = cards
+        self._cards = sorted(cards)
 
     def __len__(self):
         return len(self.cards)
 
     def __getitem__(self, key):
         return self._cards[key]
+
+    def __repr__(self: Hand) -> str:
+        """
+        Return a representation of the hand.
+
+        :returns: The ranks and suits of the cards.
+        :rtype: str. 
+        """
+        return "".join([repr(card) for card in self.cards])
 
     @property
     def cards(self):
