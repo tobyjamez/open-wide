@@ -1,3 +1,5 @@
+#!/usr/bin/python3.8
+
 import random
 import draw
 import core
@@ -9,6 +11,7 @@ import curses
 # - viewing more stats
 #   - % accuracy
 #   - best/worst positions
+# - viewing history
 
 # TODO introduce other players
 # - limpers
@@ -17,6 +20,8 @@ import curses
 # - openers
 #   - 3!
 #   - flat
+
+HAND_HISTORY_FILE = ".hand_history.csv"
 
 def main(stdscr):
     stdscr.clear()
@@ -55,11 +60,18 @@ def main(stdscr):
         while k not in (ord("o"), ord("f"), ord('q')):
             k = stdscr.getch()
 
-        if k == ord(core.correct_move(position, hand)):
+        if k == ord(correct_move := core.correct_move(position, hand)):
             correct += 1
+            correct_choice = 1
         else:
             wrong += 1
+            correct_choice = 0
 
+        with open(HAND_HISTORY_FILE, 'a') as hand_history_file:
+            hand_history_file.write(position + " " +
+                                    repr(hand) + " " +
+                                    correct_move + " " +
+                                    str(correct_choice) + "\n")
 
 if __name__ == "__main__":
     curses.wrapper(main)
