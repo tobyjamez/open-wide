@@ -40,10 +40,10 @@ def draw_table(stdscr, hand, position):
 
 
 def draw_hand(stdscr, hand, table):
-    color_dict = dict(H = curses.color_pair(4),
-                      D = curses.color_pair(4),
-                      S = curses.color_pair(3),
-                      C = curses.color_pair(3))
+    color_dict = dict(h = curses.color_pair(4),
+                      d = curses.color_pair(4),
+                      s = curses.color_pair(3),
+                      c = curses.color_pair(3))
     stdscr.attroff(curses.A_BOLD)
     stdscr.attron(curses.color_pair(3))
     n_cards = len(hand.cards)
