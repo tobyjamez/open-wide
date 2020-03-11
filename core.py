@@ -2,6 +2,7 @@
 Core classes and functions.
 """
 from __future__ import annotations
+from typing import Sequence, Tuple
 import random
 import json
 
@@ -26,7 +27,7 @@ class Card:
                     "K": 13,
                     "A": 14}
     # Allowed suits
-    _suits = ["S", "H", "D", "C"]
+    _suits = ["s", "h", "d", "c"]
 
     def __init__(self: Card,
                  suit: str,
@@ -50,8 +51,8 @@ class Card:
         rank, suit = str(rank), str(suit)
 
         # Check suit
-        if suit.upper() in self._suits:
-            self._suit = suit.upper()
+        if suit.lower() in self._suits:
+            self._suit = suit.lower()
         else:
             raise ValueError(f"Suit {suit} is not a valid suit")
 
@@ -139,60 +140,147 @@ class Card:
 
 
 class Table:
-    ""
-    def __init__(self, start_x, start_y, width, height):
+    """
+    Class to describe the geometry of a table to be displayed in a
+    curses display.
+    """
+    def __init__(self: Table,
+                 start_x: int,
+                 start_y: int,
+                 width: int,
+                 height: int
+                 ):
+        """
+        Initialise a Table instance with specified geometry.
+
+        :param start_x: x-coordinate of the Table's top-left corner.
+        :type start_x: int.
+        :param start_y: y-coordinate of the Table's top-left corner.
+        :type start_y: int.
+        :param width: Width of the table.
+        :type width: int.
+        :param height: Height of the table.
+        :type height: int.
+
+        :returns: No return; constructor.
+        :rtype: N/A.
+        """
         self._start_x = start_x
         self._start_y = start_y
         self._width = width
         self._height = height
 
     @property
-    def x(self):
+    def x(self: Table) -> int:
+        """
+        Getter for the x-coordinate of the Table's top-left corner.
+
+        :returns: The x-coordinate of the Table's top-left corner.
+        :rtype: int.
+        """
         return self._start_x
 
     @property
     def y(self):
+        """
+        Getter for the y-coordinate of the Table's top-left corner.
+
+        :returns: The y-coordinate of the Table's top-left corner.
+        :rtype: int.
+        """
         return self._start_y
 
     @property
     def width(self):
+        """
+        Getter for the Table's width.
+
+        :returns: The Table's width.
+        :rtype: int.
+        """
         return self._width
 
     @property
     def height(self):
+        """
+        Getter for the Table's height.
+
+        :returns: The Table's height.
+        :rtype: int.
+        """
         return self._height
 
 
 class Hand:
-    def __init__(self, *cards):
-        self._cards = sorted(cards)
+    """
+    Class to represent a poker hand.
+    """
+    def __init__(self: Hand,
+                 *cards: Sequence[Card]
+                 ):
+        """
+        Initialise a Hand instance with specified cards.
 
-    def __len__(self):
+        :param cards: Sequence of card objects.
+        :type cards: Sequence[Card].
+
+        :returns: No return; constructor.
+        :rype: N/A.
+        """
+        self._cards = tuple(sorted(cards))
+
+    def __len__(self: Hand) -> int:
+        """
+        Returns the number of cards in the hand.
+
+        :returns: The number of cards in the hand.
+        :rtype: int.
+        """
         return len(self.cards)
 
-    def __getitem__(self, key):
-        return self._cards[key]
+    def __getitem__(self,
+                    index: int
+                    ) -> Card:
+        """
+        [] override to return cards at a specified index.
+
+        :returns: The card at index index.
+        :rtype: Card.
+        """
+        return self._cards[index]
 
     def __repr__(self: Hand) -> str:
         """
         Return a representation of the hand.
 
         :returns: The ranks and suits of the cards.
-        :rtype: str. 
+        :rtype: str.
         """
         return "".join([repr(card) for card in self.cards])
 
     @property
-    def cards(self):
+    def cards(self: Hand) -> Tuple[Card]:
+        """
+        Getter for the cards in the hand.
+
+        :returns: The hand's cards.
+        :rtype: Tuple[Card].
+        """
         return self._cards
 
     @property
-    def suits(self):
-        return [card.suit for card in self._cards]
+    def suits(self: Hand) -> Tuple[str]:
+        """
+        Getter for the suits of the cards in the hand.
+
+        :returns: The hand's cards' suits.
+        :rtype: Tuple[str].
+        """
+        return tuple(card.suit for card in self._cards)
 
 
 def generate_cards(num):
-    suits = ["H", "S", "D", "C"]
+    suits = ["h", "s", "d", "c"]
     ranks = ["A",
              "2",
              "3",
