@@ -38,10 +38,7 @@ def main(stdscr):
     while k != ord('q'):
         k = 0
         
-        card1, card2 = core.generate_cards(2)
-        while card1.suit == card2.suit and card1.rank == card2.rank:
-            card1, card2 = core.generate_cards(2)
-        hand = core.Hand(card1, card2)
+        hand = core.Hand(*core.generate_cards(2))
         positions = ["SB",
                      "UTG",
                      "UTG+1",

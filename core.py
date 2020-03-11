@@ -36,8 +36,8 @@ class Card:
         """
         Initialise Card instance with specified rank and suit.
 
-        :param suit: Suit of the card. Allowed suits are "S", "H", "D",
-                     "H".
+        :param suit: Suit of the card. Allowed suits are "s", "h", "d",
+                     "c".
         :type suit: str.
         :param rank: Rank of the card. Allowed ranks are "A", the digits
                      "2" through "9", "T", "J", "Q", "K".
@@ -68,8 +68,7 @@ class Card:
                other: Card
                ) -> bool:
         """
-        Compare the ranks of two cards.
-        Does not compare suit.
+        Compare the ranks and suits of two cards.
 
         :param other: Card to compare to.
         :type other: Card.
@@ -77,7 +76,10 @@ class Card:
         :returns: Whether the two cards are of the same rank.
         :rtype: bool.
         """
-        return self._rank == other.rank
+        if not isinstance(other, Card):
+            return False
+        else:
+            return self._rank == other.rank and self._suit == other.suit
 
     def __gt__(self: Card,
                other: Card
@@ -299,8 +301,11 @@ def generate_cards(num):
     # Yes Toby I know but it's midnight
     out_list = []
     for _ in range(num):
-        out_list.append(Card(random.choice(suits),
-                             random.choice(ranks)))
+        card_to_append = None
+        while card_to_append not in out_list:
+            card_to_append = Card(random.choice(suits),
+                                  random.choice(ranks))
+            out_list.append(card_to_append)
 
     return tuple(out_list)
 
@@ -308,7 +313,7 @@ def generate_cards(num):
 def parse_nl_hand(hand):
     """
     """
-    if hand[0] == hand[1]:
+    if hand[0].rank == hand[1].rank:
         return hand[0].rank + hand[0].rank
     else:
         token = ["s", "o"][len(set(hand.suits)) - 1]
