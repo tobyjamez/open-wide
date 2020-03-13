@@ -2,7 +2,7 @@
 Core classes and functions.
 """
 from __future__ import annotations
-from typing import Sequence, Tuple
+from typing import Sequence, Tuple, List
 import random
 import json
 
@@ -281,7 +281,17 @@ class Hand:
         return tuple(card.suit for card in self._cards)
 
 
-def generate_cards(num):
+def generate_cards(num: int) -> Tuple[Card]:
+    """
+    Generates a specified number of randomly selected unique cards.
+
+    :param num: Number of cards to generate (Must be an integer from 0
+                to 52.
+    :type num: int.
+
+    :returns: A tuple of the specified amount of unique Card objects.
+    :rtype: Tuple[Card].
+    """
     suits = ["h", "s", "d", "c"]
     ranks = ["A",
              "2",
@@ -297,8 +307,11 @@ def generate_cards(num):
              "Q",
              "K"]
 
-    # Toby you know there's a more elegant way to do this
-    # Yes Toby I know but it's midnight
+    if num > 52:
+        raise ValueError("Cannot generate more than 52 cards.")
+    elif num < 0:
+        raise ValueError("Cannot generate less than 0 cards.")
+
     out_list = []
     for _ in range(num):
         card_to_append = None
@@ -310,8 +323,15 @@ def generate_cards(num):
     return tuple(out_list)
 
 
-def parse_nl_hand(hand):
+def parse_nl_hand(hand: Hand) -> str:
     """
+    Parse a 2-card Hand object into a string description.
+
+    :param hand: Hand to parse.
+    :type hand: Hand.
+
+    :returns: String description for a 2-card hand.
+    :rtype: str.
     """
     if hand[0].rank == hand[1].rank:
         return hand[0].rank + hand[0].rank
@@ -323,13 +343,37 @@ def parse_nl_hand(hand):
             return hand[1].rank + hand[0].rank + token
 
 
-def ranges(position, range_file="default_open_ranges.json"):
+def ranges(position: str,
+           range_file: str="default_open_ranges.json"
+           ) -> List[str]:
+    """
+    Read a range for a specified position from a specified file.
+
+    :param position: Position to get the range for.
+    :type position: str.
+
+    :returns: A range as a list.
+    :rtype: List[str].
+    """
     with open(range_file) as infile:
         _ranges = json.load(infile)
     return _ranges[position.lower()]
 
 
-def correct_move(position, hand):
+def correct_move(position: str,
+                 hand: Hand
+                 ) -> str:
+    """
+    Returns the correct move for a hand in a position.
+
+    :param position: Position to check the hand.
+    :type position: str.
+    :param hand: Hand to check.
+    :type hand: Hand.
+
+    :returns: "o" for open, "f" for fold.
+    :rtype: str.
+    """
     if parse_nl_hand(hand) in ranges(position):
         return "o"
     else:
